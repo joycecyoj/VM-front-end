@@ -1,45 +1,92 @@
 $(function() {
   console.log('ready!');
 
-  let response1 = fetch('https://jsonplaceholder.typicode.com/albums?userId=1')
-    .then(response => response.json())
-    .then(function(result) {
-      // console.log('response - result', result)
-      let div;
-      for (let i = 0; i < result.length; i++) {
-        div = $("<div class='table__row connectedDraggable id='drag'>");
-        div.append(
-          "<div class='table__cell table__cell--short'>" +
-            result[i].id +
-            '</div>' +
-            "<div class='table__cell table__cell'>" +
-            result[i].title +
-            '</div>'
-        );
-        $('#table1').append(div);
+  let users = [1, 2];
 
-        drag(1);
-      }
-    });
+  function createTable(userId) {
+    let response1 = fetch(
+      'https://jsonplaceholder.typicode.com/albums?userId=' + userId
+    )
+      .then(response => response.json())
+      .then(function(result) {
+        // console.log('response - result', result)
 
-  let response2 = fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
-    .then(response => response.json())
-    .then(function(result) {
-      let div;
-      for (let i = 0; i < result.length; i++) {
-        div = $("<div class='table__row'>");
-        div.append(
-          "<div class='table__cell table__cell--short'>" +
-            result[i].id +
-            '</div>' +
-            "<div class='table__cell table__cell'>" +
-            result[i].title +
-            '</div>'
-        );
-        $('#table2').append(div);
-      }
-    });
+        let table = $(`<div class='table' id=table${userId}>`);
+        $('main').append(table);
 
+        let header = $("<div class='table__row table__header'>")
+          .append(
+            "<div class='table__cell table__cell--short'>" + 'id' + '</div>'
+          )
+          .append("<div class='table__cell'>" + 'title' + '</div>');
+
+        $(table).append(header);
+
+        let div;
+        for (let i = 0; i < result.length; i++) {
+          div = $("<div class='table__row connectedDraggable id='drag'>");
+          div.append(
+            "<div class='table__cell table__cell--short'>" +
+              result[i].id +
+              '</div>' +
+              "<div class='table__cell table__cell'>" +
+              result[i].title +
+              '</div>'
+          );
+
+          $(table).append(div);
+
+          drag(userId);
+        }
+      });
+  }
+
+  function createAlbumForUsers(userArr) {
+    for (let i = 0; i < userArr.length; i++) {
+      createTable(userArr[i]);
+    }
+  }
+
+  createAlbumForUsers(users);
+
+  //   let response1 = fetch('https://jsonplaceholder.typicode.com/albums?userId=1')
+  //     .then(response => response.json())
+  //     .then(function(result) {
+  //       // console.log('response - result', result)
+  //       let div;
+  //       for (let i = 0; i < result.length; i++) {
+  //         div = $("<div class='table__row connectedDraggable id='drag'>");
+  //         div.append(
+  //           "<div class='table__cell table__cell--short'>" +
+  //             result[i].id +
+  //             '</div>' +
+  //             "<div class='table__cell table__cell'>" +
+  //             result[i].title +
+  //             '</div>'
+  //         );
+  //         $('#table1').append(div);
+
+  //         drag(1);
+  //       }
+  //     });
+
+  //   let response2 = fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
+  //     .then(response => response.json())
+  //     .then(function(result) {
+  //       let div;
+  //       for (let i = 0; i < result.length; i++) {
+  //         div = $("<div class='table__row'>");
+  //         div.append(
+  //           "<div class='table__cell table__cell--short'>" +
+  //             result[i].id +
+  //             '</div>' +
+  //             "<div class='table__cell table__cell'>" +
+  //             result[i].title +
+  //             '</div>'
+  //         );
+  //         $('#table2').append(div);
+  //       }
+  //     });
 });
 
 function drag(userId) {
@@ -49,14 +96,14 @@ function drag(userId) {
     refreshPositions: true,
     drag: function(event, ui) {
       ui.helper.addClass('draggable');
-    }
+    },
   });
 
-  $('#table2').droppable({
+  $('#table' + userId).droppable({
     drop: function(event, ui) {
-    //   console.log('dropppppppp', 'event', event);
+      //   console.log('dropppppppp', 'event', event);
       ui.draggable.addClass('dropped');
-      $('#table2').append(ui.draggable);
+      $('#table' + userId).append(ui.draggable);
 
       let albumId = ui.draggable[0].innerText.split('\n')[0];
       let albumTitle = ui.draggable[0].innerText.split('\n')[1];
@@ -64,7 +111,7 @@ function drag(userId) {
       fetch('https://jsonplaceholder.typicode.com/albums/' + albumId, {
         method: 'PUT',
         body: JSON.stringify({
-          userId: 2,
+          userId: userId,
           id: albumId,
           title: albumTitle,
         }),
@@ -75,18 +122,12 @@ function drag(userId) {
         .then(response => response.json())
         .then(json => console.log(json));
 
-        fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
+      fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
         .then(response => response.json())
-        .then(json => console.log(json))
-    }
+        .then(json => console.log(json));
+    },
   });
-
-
 }
-
-
-
-
 
 /* ----------------------------------------------------------------------------*/
 // using ajax to Display
