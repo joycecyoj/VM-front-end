@@ -5,8 +5,6 @@ $(function() {
     .then(response => response.json())
     .then(json => createAlbumForUsers(json))
 
-    console.log(users)
-
   function createTable(userId) {
     let response1 = fetch(
       'https://jsonplaceholder.typicode.com/albums?userId=' + userId
@@ -53,6 +51,18 @@ $(function() {
   }
 
   createAlbumForUsers(users);
+
+  let searchInput;
+  $("input").keyup(function() {
+      searchInput = this.value
+    //   console.log('serch txt', this.value)
+  })
+
+  $("#button").button().click(function(){
+    // console.log(searchInput)
+    console.log('clicked')
+    search(searchInput)
+})
 
   //   let response1 = fetch('https://jsonplaceholder.typicode.com/albums?userId=1')
   //     .then(response => response.json())
@@ -132,6 +142,11 @@ function drag(userId) {
         .then(json => console.log(json));
     },
   });
+}
+
+
+function search(str) {
+    let rows = $()
 }
 
 /* ----------------------------------------------------------------------------*/
