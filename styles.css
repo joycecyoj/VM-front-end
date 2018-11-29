@@ -5,8 +5,9 @@ body {
 }
 
 main {
+  flex-wrap: wrap;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .search {
@@ -40,6 +41,7 @@ main {
   width: 48%;
   border: 1px solid #333;
   background-color: white;
+  margin-bottom: 30px;
 }
 .table__header {
   background-color: #333;

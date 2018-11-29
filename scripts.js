@@ -1,7 +1,11 @@
 $(function() {
   console.log('ready!');
 
-  let users = [1, 2];
+  let users = fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json())
+    .then(json => createAlbumForUsers(json))
+
+    console.log(users)
 
   function createTable(userId) {
     let response1 = fetch(
@@ -38,12 +42,13 @@ $(function() {
 
           drag(userId);
         }
+
       });
   }
 
   function createAlbumForUsers(userArr) {
     for (let i = 0; i < userArr.length; i++) {
-      createTable(userArr[i]);
+      createTable(userArr[i].id);
     }
   }
 
