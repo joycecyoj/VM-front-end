@@ -61,6 +61,11 @@ main {
 .table__cell {
   margin-right: 10px;
 }
+
+.table__cell_userId {
+  margin-left: 600px;
+}
+
 .table__cell--short {
   flex-shrink: 0;
   width: 50px;

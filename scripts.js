@@ -3,7 +3,58 @@ $(function() {
 
   let users = fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => response.json())
-    .then(json => createAlbumForUsers(json))
+    .then(json => createAlbumForUsers(json));
+
+
+    // let users = [
+    //     {
+    //     "id": 1,
+    //     "name": "Leanne Graham",
+    //     "username": "Bret",
+    //     "email": "Sincere@april.biz",
+    //     "address": {
+    //     "street": "Kulas Light",
+    //     "suite": "Apt. 556",
+    //     "city": "Gwenborough",
+    //     "zipcode": "92998-3874",
+    //     "geo": {
+    //     "lat": "-37.3159",
+    //     "lng": "81.1496"
+    //     }
+    //     },
+    //     "phone": "1-770-736-8031 x56442",
+    //     "website": "hildegard.org",
+    //     "company": {
+    //     "name": "Romaguera-Crona",
+    //     "catchPhrase": "Multi-layered client-server neural-net",
+    //     "bs": "harness real-time e-markets"
+    //     }
+    //     },
+    //     {
+    //     "id": 2,
+    //     "name": "Ervin Howell",
+    //     "username": "Antonette",
+    //     "email": "Shanna@melissa.tv",
+    //     "address": {
+    //     "street": "Victor Plains",
+    //     "suite": "Suite 879",
+    //     "city": "Wisokyburgh",
+    //     "zipcode": "90566-7771",
+    //     "geo": {
+    //     "lat": "-43.9509",
+    //     "lng": "-34.4618"
+    //     }
+    //     },
+    //     "phone": "010-692-6593 x09125",
+    //     "website": "anastasia.net",
+    //     "company": {
+    //     "name": "Deckow-Crist",
+    //     "catchPhrase": "Proactive didactic contingency",
+    //     "bs": "synergize scalable supply-chains"
+    //     }
+    //     }]
+
+
 
   function createTable(userId) {
     let response1 = fetch(
@@ -20,7 +71,8 @@ $(function() {
           .append(
             "<div class='table__cell table__cell--short'>" + 'id' + '</div>'
           )
-          .append("<div class='table__cell'>" + 'title' + '</div>');
+          .append("<div class='table__cell'>" + "title" + "</div>")
+          .append("<div class='table__cell_userId'>" + "UserId: " + userId + "</div>");
 
         $(table).append(header);
 
@@ -40,7 +92,6 @@ $(function() {
 
           drag(userId);
         }
-
       });
   }
 
@@ -53,55 +104,18 @@ $(function() {
   createAlbumForUsers(users);
 
   let searchInput;
-  $("input").keyup(function() {
-      searchInput = this.value
+  $('input').keyup(function() {
+    searchInput = this.value;
     //   console.log('serch txt', this.value)
-  })
+  });
 
-  $("#button").button().click(function(){
-    // console.log(searchInput)
-    console.log('clicked')
-    search(searchInput)
-})
-
-  //   let response1 = fetch('https://jsonplaceholder.typicode.com/albums?userId=1')
-  //     .then(response => response.json())
-  //     .then(function(result) {
-  //       // console.log('response - result', result)
-  //       let div;
-  //       for (let i = 0; i < result.length; i++) {
-  //         div = $("<div class='table__row connectedDraggable id='drag'>");
-  //         div.append(
-  //           "<div class='table__cell table__cell--short'>" +
-  //             result[i].id +
-  //             '</div>' +
-  //             "<div class='table__cell table__cell'>" +
-  //             result[i].title +
-  //             '</div>'
-  //         );
-  //         $('#table1').append(div);
-
-  //         drag(1);
-  //       }
-  //     });
-
-  //   let response2 = fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
-  //     .then(response => response.json())
-  //     .then(function(result) {
-  //       let div;
-  //       for (let i = 0; i < result.length; i++) {
-  //         div = $("<div class='table__row'>");
-  //         div.append(
-  //           "<div class='table__cell table__cell--short'>" +
-  //             result[i].id +
-  //             '</div>' +
-  //             "<div class='table__cell table__cell'>" +
-  //             result[i].title +
-  //             '</div>'
-  //         );
-  //         $('#table2').append(div);
-  //       }
-  //     });
+  $('#button')
+    .button()
+    .click(function() {
+      // console.log(searchInput)
+      console.log('clicked');
+      search(searchInput);
+    });
 });
 
 function drag(userId) {
@@ -144,9 +158,16 @@ function drag(userId) {
   });
 }
 
-
 function search(str) {
-    let rows = $()
+  console.log('in search', str);
+  let rows = $(".table").find(".connectedDraggable").hide();
+  console.log('rows', rows)
+  if (str.length) {
+      let data = str.split(" ")
+      $.each(data, function(i, v) {
+          rows.filter(":contains('" + v + "')").show()
+      })
+  } else rows.show()
 }
 
 /* ----------------------------------------------------------------------------*/
@@ -174,3 +195,43 @@ function search(str) {
 //         }
 //     }
 // })
+
+/* ----------------------------------------------------------------------------*/
+//   let response1 = fetch('https://jsonplaceholder.typicode.com/albums?userId=1')
+//     .then(response => response.json())
+//     .then(function(result) {
+//       // console.log('response - result', result)
+//       let div;
+//       for (let i = 0; i < result.length; i++) {
+//         div = $("<div class='table__row connectedDraggable id='drag'>");
+//         div.append(
+//           "<div class='table__cell table__cell--short'>" +
+//             result[i].id +
+//             '</div>' +
+//             "<div class='table__cell table__cell'>" +
+//             result[i].title +
+//             '</div>'
+//         );
+//         $('#table1').append(div);
+
+//         drag(1);
+//       }
+//     });
+
+//   let response2 = fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
+//     .then(response => response.json())
+//     .then(function(result) {
+//       let div;
+//       for (let i = 0; i < result.length; i++) {
+//         div = $("<div class='table__row'>");
+//         div.append(
+//           "<div class='table__cell table__cell--short'>" +
+//             result[i].id +
+//             '</div>' +
+//             "<div class='table__cell table__cell'>" +
+//             result[i].title +
+//             '</div>'
+//         );
+//         $('#table2').append(div);
+//       }
+//     });
