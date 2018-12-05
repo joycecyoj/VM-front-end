@@ -11,7 +11,7 @@ main {
 }
 
 .hover {
-  background-color: #A8D4AD;
+  background-color: #00FFC5;
 }
 
 .search {
@@ -68,7 +68,7 @@ main {
 }
 
 .table__cell_userId {
-  margin-left: 600px;
+  margin-left: 60px;
 }
 
 .table__cell--short {
@@ -77,4 +77,8 @@ main {
 }
 .table__cell:last-child {
   margin-right: 0px;
+}
+
+.rowColor {
+    background-color: #A6D8D4
 }

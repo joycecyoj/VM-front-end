@@ -78,7 +78,14 @@ $(function() {
 
         let div;
         for (let i = 0; i < result.length; i++) {
-          div = $("<div class='table__row connectedDraggable id='drag'>");
+          if (isOdd(result[i].id)) {
+            div = $(
+              "<div class='table__row connectedDraggable rowColor id='drag'>"
+            );
+          } else {
+            div = $("<div class='table__row connectedDraggable id='drag'>");
+          }
+
           div.append(
             "<div class='table__cell table__cell--short'>" +
               result[i].id +
@@ -90,11 +97,18 @@ $(function() {
 
           $(table).append(div);
 
-          $('.table__row').hover(
+          $('.connectedDraggable').hover(
             function() {
+              if ($(this).hasClass('rowColor')) {
+                $(this).removeClass('rowColor');
+              }
               $(this).addClass('hover');
             },
             function() {
+              let albumId = $(this)[0].innerText.split('\n')[0];
+              if (isOdd(albumId)) {
+                $(this).addClass('rowColor');
+              }
               $(this).removeClass('hover');
             }
           );
@@ -125,8 +139,6 @@ $(function() {
       console.log('clicked');
       search(searchInput);
     });
-
-
 });
 
 function drag(userId) {
@@ -180,6 +192,14 @@ function search(str) {
       rows.filter(":contains('" + v + "')").show();
     });
   } else rows.show();
+}
+
+function isOdd(num) {
+  if (num % 2 !== 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /* ----------------------------------------------------------------------------*/
