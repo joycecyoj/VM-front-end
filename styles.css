@@ -10,6 +10,10 @@ main {
   justify-content: space-around;
 }
 
+.hover {
+  background-color: #A8D4AD;
+}
+
 .search {
   padding-bottom: 30px;
 }
@@ -54,6 +58,7 @@ main {
   padding: 5px;
   border-bottom: 1px solid #333;
 }
+
 .table__row:last-child {
   border-bottom: 0;
 }

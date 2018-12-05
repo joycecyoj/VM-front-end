@@ -1,60 +1,58 @@
 $(function() {
   console.log('ready!');
 
-  let users = fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(json => createAlbumForUsers(json));
+  //   let users = fetch('https://jsonplaceholder.typicode.com/users')
+  //     .then(response => response.json())
+  //     .then(json => createAlbumForUsers(json));
 
-
-    // let users = [
-    //     {
-    //     "id": 1,
-    //     "name": "Leanne Graham",
-    //     "username": "Bret",
-    //     "email": "Sincere@april.biz",
-    //     "address": {
-    //     "street": "Kulas Light",
-    //     "suite": "Apt. 556",
-    //     "city": "Gwenborough",
-    //     "zipcode": "92998-3874",
-    //     "geo": {
-    //     "lat": "-37.3159",
-    //     "lng": "81.1496"
-    //     }
-    //     },
-    //     "phone": "1-770-736-8031 x56442",
-    //     "website": "hildegard.org",
-    //     "company": {
-    //     "name": "Romaguera-Crona",
-    //     "catchPhrase": "Multi-layered client-server neural-net",
-    //     "bs": "harness real-time e-markets"
-    //     }
-    //     },
-    //     {
-    //     "id": 2,
-    //     "name": "Ervin Howell",
-    //     "username": "Antonette",
-    //     "email": "Shanna@melissa.tv",
-    //     "address": {
-    //     "street": "Victor Plains",
-    //     "suite": "Suite 879",
-    //     "city": "Wisokyburgh",
-    //     "zipcode": "90566-7771",
-    //     "geo": {
-    //     "lat": "-43.9509",
-    //     "lng": "-34.4618"
-    //     }
-    //     },
-    //     "phone": "010-692-6593 x09125",
-    //     "website": "anastasia.net",
-    //     "company": {
-    //     "name": "Deckow-Crist",
-    //     "catchPhrase": "Proactive didactic contingency",
-    //     "bs": "synergize scalable supply-chains"
-    //     }
-    //     }]
-
-
+  let users = [
+    {
+      id: 1,
+      name: 'Leanne Graham',
+      username: 'Bret',
+      email: 'Sincere@april.biz',
+      address: {
+        street: 'Kulas Light',
+        suite: 'Apt. 556',
+        city: 'Gwenborough',
+        zipcode: '92998-3874',
+        geo: {
+          lat: '-37.3159',
+          lng: '81.1496',
+        },
+      },
+      phone: '1-770-736-8031 x56442',
+      website: 'hildegard.org',
+      company: {
+        name: 'Romaguera-Crona',
+        catchPhrase: 'Multi-layered client-server neural-net',
+        bs: 'harness real-time e-markets',
+      },
+    },
+    {
+      id: 2,
+      name: 'Ervin Howell',
+      username: 'Antonette',
+      email: 'Shanna@melissa.tv',
+      address: {
+        street: 'Victor Plains',
+        suite: 'Suite 879',
+        city: 'Wisokyburgh',
+        zipcode: '90566-7771',
+        geo: {
+          lat: '-43.9509',
+          lng: '-34.4618',
+        },
+      },
+      phone: '010-692-6593 x09125',
+      website: 'anastasia.net',
+      company: {
+        name: 'Deckow-Crist',
+        catchPhrase: 'Proactive didactic contingency',
+        bs: 'synergize scalable supply-chains',
+      },
+    },
+  ];
 
   function createTable(userId) {
     let response1 = fetch(
@@ -71,8 +69,10 @@ $(function() {
           .append(
             "<div class='table__cell table__cell--short'>" + 'id' + '</div>'
           )
-          .append("<div class='table__cell'>" + "title" + "</div>")
-          .append("<div class='table__cell_userId'>" + "UserId: " + userId + "</div>");
+          .append("<div class='table__cell'>" + 'title' + '</div>')
+          .append(
+            "<div class='table__cell_userId'>" + 'UserId: ' + userId + '</div>'
+          );
 
         $(table).append(header);
 
@@ -89,6 +89,15 @@ $(function() {
           );
 
           $(table).append(div);
+
+          $('.table__row').hover(
+            function() {
+              $(this).addClass('hover');
+            },
+            function() {
+              $(this).removeClass('hover');
+            }
+          );
 
           drag(userId);
         }
@@ -116,13 +125,14 @@ $(function() {
       console.log('clicked');
       search(searchInput);
     });
+
+
 });
 
 function drag(userId) {
   $('.connectedDraggable').draggable({
     helper: 'clone',
     revert: 'invalid',
-    refreshPositions: true,
     drag: function(event, ui) {
       ui.helper.addClass('draggable');
     },
@@ -160,14 +170,16 @@ function drag(userId) {
 
 function search(str) {
   console.log('in search', str);
-  let rows = $(".table").find(".connectedDraggable").hide();
-  console.log('rows', rows)
-  if (str.length) {
-      let data = str.split(" ")
-      $.each(data, function(i, v) {
-          rows.filter(":contains('" + v + "')").show()
-      })
-  } else rows.show()
+  let rows = $('.table')
+    .find('.connectedDraggable')
+    .hide();
+  console.log('rows', rows);
+  if (str.length > 1) {
+    let data = str.split(' ');
+    $.each(data, function(i, v) {
+      rows.filter(":contains('" + v + "')").show();
+    });
+  } else rows.show();
 }
 
 /* ----------------------------------------------------------------------------*/
