@@ -60,7 +60,7 @@ $(function() {
     )
       .then(response => response.json())
       .then(function(result) {
-        // console.log('response - result', result)
+        console.log('response - result', result)
 
         let table = $(`<div class='table' id=table${userId}>`);
         $('main').append(table);
@@ -92,6 +92,9 @@ $(function() {
               '</div>' +
               "<div class='table__cell table__cell'>" +
               result[i].title +
+              '</div>' +
+              "<div class='table__cell table__cell--short'>" +
+              "<input id='checkbox' type='checkbox'>" +
               '</div>'
           );
 
@@ -105,7 +108,7 @@ $(function() {
               $(this).addClass('hover');
             },
             function() {
-              let albumId = $(this)[0].innerText.split('\n')[0];
+                let albumId = $(this)[0].innerText.split('\n')[0]
               if (isOdd(albumId)) {
                 $(this).addClass('rowColor');
               }
@@ -113,7 +116,15 @@ $(function() {
             }
           );
 
-          drag(userId);
+          $('.connectedDraggable').draggable({
+            helper: 'clone',
+            revert: 'invalid',
+            drag: function(event, ui) {
+              ui.helper.addClass('draggable');
+            },
+          });
+
+          makeDraggable(userId);
         }
       });
   }
@@ -141,15 +152,7 @@ $(function() {
     });
 });
 
-function drag(userId) {
-  $('.connectedDraggable').draggable({
-    helper: 'clone',
-    revert: 'invalid',
-    drag: function(event, ui) {
-      ui.helper.addClass('draggable');
-    },
-  });
-
+function makeDraggable(userId) {
   $('#table' + userId).droppable({
     drop: function(event, ui) {
       //   console.log('dropppppppp', 'event', event);
@@ -173,6 +176,8 @@ function drag(userId) {
         .then(response => response.json())
         .then(json => console.log(json));
 
+
+// ???????????????????????????????????????????????????????????????????????????????????/
       fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
         .then(response => response.json())
         .then(json => console.log(json));

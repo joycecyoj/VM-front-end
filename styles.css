@@ -57,6 +57,7 @@ main {
   display: flex;
   padding: 5px;
   border-bottom: 1px solid #333;
+  justify-content: space-between
 }
 
 .table__row:last-child {
@@ -75,6 +76,7 @@ main {
   flex-shrink: 0;
   width: 50px;
 }
+
 .table__cell:last-child {
   margin-right: 0px;
 }
