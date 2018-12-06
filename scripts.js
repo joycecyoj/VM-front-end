@@ -171,7 +171,7 @@ $(function() {
 
 
 
-
+// TEXT SEARCH
   let searchInput;
   $('input').keyup(function() {
     searchInput = this.value;
@@ -181,9 +181,9 @@ $(function() {
   $('#button')
     .button()
     .click(function() {
-      // console.log(searchInput)
-      console.log('clicked');
-      search(searchInput);
+      if (searchInput.length > 0) {
+        search(searchInput);
+      }
     });
 });
 
