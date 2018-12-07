@@ -1,9 +1,9 @@
 $(function() {
   console.log('ready!');
 
-  //   let users = fetch('https://jsonplaceholder.typicode.com/users')
-  //     .then(response => response.json())
-  //     .then(json => createAlbumForUsers(json));
+    // let users = fetch('https://jsonplaceholder.typicode.com/users')
+    //   .then(response => response.json())
+    //   .then(json => createAlbumForUsers(json));
 
   let users = [
     {
@@ -124,10 +124,25 @@ $(function() {
             helper: 'clone',
             revert: 'invalid',
             drag: function(event, ui) {
-              ui.helper.addClass('draggable');
+            //   ui.helper.addClass('selected');
+              let selected = ui.helper.addClass('selected');
+              console.log('selected', selected)
+              let container = $('<div/>').attr('id', '.draggingContainer')
+                container.append(selected.clone().removeClass('selected hover'))
+                console.log('container', container)
+
+            return container
             },
           });
 
+          $(`#table${userId}`).droppable({
+            drop: function(event, ui) {
+                console.log('ui----- single', ui)
+              //   console.log('dropppppppp', 'event', event);
+              ui.draggable.addClass('dropped');
+              $(`#table${userId}`).append(ui.draggable);
+            }
+         })
 
           // Multi Selection
           let $select = $(`input[name=${albumId}]`)
@@ -138,8 +153,6 @@ $(function() {
                 console.log('checked-------------')
                 let selectedRow = $(`div.table__row${albumId}`)
 
-                console.log('has color', selectedRow.hasClass('rowColor'))
-
                 // selectedRow.removeClass('rowColor').addClass('selected')
                 selectedRow.addClass('selected')
                 selectedArr.push(selectedRow)
@@ -147,17 +160,43 @@ $(function() {
 
             console.log('selectedArr', selectedArr)
 
+
+
+            $(`#table${userId} .table__row`).draggable({
+                helper: function() {
+                    let selected = $('div.selected')
+
+                    console.log('selected------', selected)
+
+                    if (selected.length === 0) {
+                        selected = $(this).addClass('selected')
+                    }
+                    let container = $('<div/>').attr('id', '.draggingContainer')
+                    container.append(selected.clone().removeClass('selected hover'))
+
+                    return container
+                }
+            })
+
+            console.log('length------', selectedArr.length)
+
           })
 
 
 
-        //   if (selectedArr.length > 1) {
+        }
+
+        // if (selectedArr && selectedArr.length > 1) {
+            // console.log('here 1')
             makeDraggableGroup(selectedArr, userId)
         //   } else {
-            makeDraggable(userId);
+            //   console.log('here 2')
+            // makeDraggable(selectedArr, userId);
+
         //   }
-        }
+
       });
+
   }
 
   function createAlbumForUsers(userArr) {
@@ -195,75 +234,61 @@ $(function() {
 // class.droppable
 
 function makeDraggableGroup(selectedArr, userId) {
-    console.log('function called---------------')
-    for (let i = 0; i < selectedArr.length; i++) {
-        console.log('i', i)
-        $('#table' + userId).droppable({
-            drop: function(event, ui) {
-              //   console.log('dropppppppp', 'event', event);
-              ui.draggable.addClass('dropped');
-              $('#table' + userId).append(ui.draggable);
+    console.log('selectedArr length', selectedArr.length)
+    console.log('userId', userId)
+    console.log('group triggered')
+    // console.log('table', $(`#table${userId}`))
 
-              let albumId = ui.draggable[0].innerText.split('\n')[0];
-              let albumTitle = ui.draggable[0].innerText.split('\n')[1];
+        $(`#table${userId}`).droppable({
+            drop: function (event, ui) {
+                console.log('ui----- group', ui)
+                $(`#table${userId}`).append(ui.helper.children())
+                $('.selected').remove()
 
-              fetch('https://jsonplaceholder.typicode.com/albums/' + albumId, {
-                method: 'PUT',
-                body: JSON.stringify({
-                  userId: userId,
-                  id: albumId,
-                  title: albumTitle,
-                }),
-                headers: {
-                  'Content-type': 'application/json; charset=UTF-8',
-                },
-              })
-                .then(response => response.json())
-                .then(json => console.log(json));
-
-              // ???????????????????????????????????????????????????????????????????????????????????/
-              fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
-                .then(response => response.json())
-                .then(json => console.log(json));
-            },
-          });
-    }
-
-    }
+                console.log('ui.helper.children', ui.helper.children())
 
 
-function makeDraggable(userId) {
-    console.log('here-------', $('#table' + userId))
-  $('#table' + userId).droppable({
-    drop: function(event, ui) {
-      //   console.log('dropppppppp', 'event', event);
-      ui.draggable.addClass('dropped');
-      $('#table' + userId).append(ui.draggable);
-
-      let albumId = ui.draggable[0].innerText.split('\n')[0];
-      let albumTitle = ui.draggable[0].innerText.split('\n')[1];
-
-      fetch('https://jsonplaceholder.typicode.com/albums/' + albumId, {
-        method: 'PUT',
-        body: JSON.stringify({
-          userId: userId,
-          id: albumId,
-          title: albumTitle,
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      })
-        .then(response => response.json())
-        .then(json => console.log(json));
-
-      // ???????????????????????????????????????????????????????????????????????????????????/
-      fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
-        .then(response => response.json())
-        .then(json => console.log(json));
-    },
-  });
+            }
+        })
 }
+
+
+// function makeDraggable(selectedArr, userId) {
+//     console.log('selectedArr in func------------', selectedArr)
+
+//         console.log('single triggered')
+//         $(`#table${userId}`).droppable({
+//             drop: function(event, ui) {
+//                 console.log('ui----- single', ui)
+//               //   console.log('dropppppppp', 'event', event);
+//               ui.draggable.addClass('dropped');
+//               $(`#table${userId}`).append(ui.draggable);
+
+//               let albumId = ui.draggable[0].innerText.split('\n')[0];
+//               let albumTitle = ui.draggable[0].innerText.split('\n')[1];
+
+//               fetch('https://jsonplaceholder.typicode.com/albums/' + albumId, {
+//                 method: 'PUT',
+//                 body: JSON.stringify({
+//                   userId: userId,
+//                   id: albumId,
+//                   title: albumTitle,
+//                 }),
+//                 headers: {
+//                   'Content-type': 'application/json; charset=UTF-8',
+//                 },
+//               })
+//                 .then(response => response.json())
+//                 .then(json => console.log(json));
+
+//               // ???????????????????????????????????????????????????????????????????????????????????/
+//             //   fetch('https://jsonplaceholder.typicode.com/albums?userId=2')
+//             //     .then(response => response.json())
+//             //     .then(json => console.log(json));
+
+//             },
+//           });
+// }
 
 function search(str) {
   console.log('in search', str);
